@@ -150,7 +150,7 @@ class GijirokuArea extends React.Component {
         <Editor 
           className='editor' 
           editorState={this.state.editorState} 
-          onChange={this.handleChange.bind(this)}
+          onChange={this.handleChange.bind(this)} 
           handleKeyCommand={this.handleKeyCommand.bind(this)} 
           onTab={this.onTab.bind(this)} 
           blockStyleFn={myBlockStyleFn} 
@@ -225,14 +225,14 @@ class GijirokuMaker extends React.Component {
       <div id='reactroot'>
         <GijirokuArea ref='gijirokuArea' buttonLayout={this.buttonLayout.bind(this)} />
         <MuiThemeProvider>
-        <div style={{display: 'flex', justifyContent: 'center'}}>
-          <div style={{margin: '0px 4px', display: 'none'}}><TextField id='sizeInput' value={this.state.fontSize} onChange={(e) => {this.sizeChanged(e)}} type='number' inputStyle={{textAlign: 'left'}} style = {{width: '35px'}} max={99} min={0}></TextField></div>
-          <div style={{margin: '0px 4px', display: 'none'}}><RaisedButton label='Size' id='sizeButton' onMouseDown={(e) => {this.sizeClicked(); e.preventDefault()}} /></div>
-          <div style={{margin: '0px 4px'}}><RaisedButton label='Bold' primary={this.state.boldLayout} id='boldButton'  onMouseDown={(e) => {this.boldClicked(); e.preventDefault()}} /></div>
-          <div style={{margin: '0px 4px'}}><RaisedButton label='Italic' id='italicButton' primary={this.state.italicLayout} onMouseDown={(e) => {this.italicClicked(); e.preventDefault()}} /></div>
-          <div style={{margin: '0px 4px'}}><RaisedButton label='Save' id='saveButton' onMouseDown={(e) => {this.saveClicked(); e.preventDefault()}} /></div>
-        </div>
-      </MuiThemeProvider>
+          <div style={{display: 'flex', justifyContent: 'center'}}>
+            <div style={{margin: '0px 4px', display: 'none'}}><TextField id='sizeInput' value={this.state.fontSize} onChange={(e) => {this.sizeChanged(e)}} type='number' inputStyle={{textAlign: 'left'}} style = {{width: '35px'}} max={99} min={0}></TextField></div>
+            <div style={{margin: '0px 4px', display: 'none'}}><RaisedButton label='Size' id='sizeButton' onMouseDown={(e) => {this.sizeClicked(); e.preventDefault()}} /></div>
+            <div style={{margin: '0px 4px'}}><RaisedButton label='Bold' primary={this.state.boldLayout} id='boldButton'  onMouseDown={(e) => {this.boldClicked(); e.preventDefault()}} /></div>
+            <div style={{margin: '0px 4px'}}><RaisedButton label='Italic' id='italicButton' primary={this.state.italicLayout} onMouseDown={(e) => {this.italicClicked(); e.preventDefault()}} /></div>
+            <div style={{margin: '0px 4px'}}><RaisedButton label='Save' id='saveButton' onMouseDown={(e) => {this.saveClicked(); e.preventDefault()}} /></div>
+          </div>
+        </MuiThemeProvider>
       </div>
     );
   }
