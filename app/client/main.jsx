@@ -1,3 +1,5 @@
+import {remote} from 'electron';
+import path from 'path';
 import fs from 'fs';
 import React from 'react';
 import ReactDOM from 'react-dom';
@@ -60,7 +62,8 @@ class GijirokuArea extends React.Component {
     this.handleChange(RichUtils.toggleInlineStyle(this.state.editorState, 'ITALIC'));
   }
   saveClicked() {
-    fs.writeFile('content.json', JSON.stringify(convertToRaw(this.state.editorState.getCurrentContent()), null, '    '), (err) => {if (err) throw err;});
+    const curDir = path.dirname(remote.app.getPath('exe'));
+    fs.writeFile(path.join(curDir, '/content.json'), JSON.stringify(convertToRaw(this.state.editorState.getCurrentContent()), null, '    '), (err) => {if (err) throw err;});
     const jsondata = JSON.parse(JSON.stringify(convertToRaw(this.state.editorState.getCurrentContent())));
     let output = '';
     let preblock = '';
@@ -124,7 +127,7 @@ class GijirokuArea extends React.Component {
       }
       output += temp + '\r\n';
     });
-    fs.writeFile('content.txt', output, (err) => {if (err) throw err;});
+    fs.writeFile(path.join(curDir, '/content.txt'), output, (err) => {if (err) throw err;});
   }
   onTab(e) {
     switch (RichUtils.getCurrentBlockType(this.state.editorState)) {
