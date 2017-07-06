@@ -18,6 +18,9 @@ class GijirokuArea extends React.Component {
       eigen: moment().format('YYYYMMDD_HHmmss')
     };
   }
+  componentDidMount() {
+    this.refs.editor.focus();
+  }
   handleChange(editorState) {
     this.setState({editorState});
     this.props.buttonLayout(editorState.getCurrentInlineStyle().toArray());
@@ -156,7 +159,7 @@ class GijirokuArea extends React.Component {
     return (
       <div>
         <Editor 
-          className='editor' 
+          ref='editor' 
           editorState={this.state.editorState} 
           onChange={this.handleChange.bind(this)} 
           handleKeyCommand={this.handleKeyCommand.bind(this)} 
