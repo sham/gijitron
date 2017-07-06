@@ -65,7 +65,7 @@ class GijirokuArea extends React.Component {
   }
   saveClicked() {
     const curDir = path.join(path.dirname(remote.app.getPath('exe')), '/gijiroku');
-    if (!fs.existsSync(curDir)){
+    if (!fs.existsSync(curDir)) {
       fs.mkdirSync(curDir);
     }
     fs.writeFile(path.join(curDir, `/${this.state.eigen}.json`), JSON.stringify(convertToRaw(this.state.editorState.getCurrentContent()), null, '    '), (err) => {if (err) throw err;});
