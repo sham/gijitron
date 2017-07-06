@@ -71,11 +71,12 @@ class GijirokuArea extends React.Component {
     if (!fs.existsSync(curDir)) {
       fs.mkdirSync(curDir);
     }
-    fs.writeFile(path.join(curDir, `/${this.state.eigen}.json`), JSON.stringify(convertToRaw(this.state.editorState.getCurrentContent()), null, '    '), (err) => {if (err) throw err;});
-    const jsondata = JSON.parse(JSON.stringify(convertToRaw(this.state.editorState.getCurrentContent())));
+    const contentJson = JSON.stringify(convertToRaw(this.state.editorState.getCurrentContent()),  null, '  ');
+    fs.writeFile(path.join(curDir, `/${this.state.eigen}.json`), contentJson, (err) => {if (err) throw err;});
+    const contentObject = JSON.parse(contentJson);
     let output = '';
     let preblock = '';
-    jsondata['blocks'].forEach((block) => {
+    contentObject['blocks'].forEach((block) => {
       let temp = block['text'];
       const tasks = [];
       block['inlineStyleRanges'].forEach((inlineStyle) => {
