@@ -5,7 +5,7 @@ import moment from 'moment';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import {MuiThemeProvider, RaisedButton, TextField} from 'material-ui';
-import Draft, {Editor, EditorState, RichUtils, convertToRaw, getDefaultKeyBinding, KeyBindingUtil, Modifier} from 'draft-js';
+import Draft, {Editor, EditorState, ContentState, RichUtils, convertToRaw, convertFromRaw, getDefaultKeyBinding, KeyBindingUtil, Modifier} from 'draft-js';
 import injectTapEventPlugin from 'react-tap-event-plugin';
 injectTapEventPlugin();
 const {hasCommandModifier} = KeyBindingUtil;
@@ -13,10 +13,33 @@ const {hasCommandModifier} = KeyBindingUtil;
 class GijirokuArea extends React.Component {
   constructor(props) {
     super(props);
+    const date = moment().locale('ja');
     this.state = {
       editorState: EditorState.createEmpty(),
-      eigen: moment().format('YYYYMMDD_HHmmss')
+      eigen: date.format('YYYYMMDD_HHmmss')
     };
+    const settingsPath = path.join(path.dirname(remote.app.getPath('exe')), '/gijiroku/.settings');
+    fs.readFile(settingsPath, (err, data) => {
+      if (err) {
+        return false;
+      }
+      const settings = JSON.parse(data.toString()
+                                      .replace(/YYYY/g, date.format('YYYY'))
+                                      .replace(/MM/g, date.format('MM'))
+                                      .replace(/DD/g, date.format('DD'))
+                                      .replace(/ddd/g, date.format('ddd')));
+      const updatedEditorState = EditorState.createWithContent(convertFromRaw(settings));
+      if ('anchorBlock' in settings && 'anchorOffset' in settings) {
+        const updatedSelectionState = updatedEditorState.getSelection().merge({
+                                      anchorKey: settings['anchorBlock'],
+                                      anchorOffset: settings['anchorOffset']
+        });
+        this.handleChange(EditorState.forceSelection(updatedEditorState, updatedSelectionState));
+      } else {
+        this.handleChange(updatedEditorState);
+      }
+      return true;
+    });
   }
   componentDidMount() {
     this.refs.editor.focus();
