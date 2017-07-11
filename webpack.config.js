@@ -10,7 +10,7 @@ var targets = glob.sync(`${jsBasePath}/**/*.{js,jsx}`)
 var entries = {}
 targets.forEach(value => {
   var re = new RegExp(`${jsBasePath}/`)
-  var key = value.replace(re, '').replace('.jsx', '.js').replace('.js', '')
+  var key = value.replace(re, '').replace(/\.jsx?$/g, '')
   entries[key] = value;
 });
 
@@ -28,7 +28,7 @@ module.exports = {
   module: {
     loaders: [
     {
-      test: /.jsx?$/,
+      test: /\.jsx?$/,
       loader: 'babel-loader',
       exclude: /node_modules/
     }
