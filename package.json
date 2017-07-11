@@ -52,9 +52,9 @@
     "react-tap-event-plugin": "^2.0.1",
     "slash": "^1.0.0",
     "spectron": "^3.7.2",
-    "uglify-js": "^2.8.0",
+    "uglify-js": "^3.0.24",
     "uglifyjs-webpack-plugin": "^0.4.6",
-    "webpack": "^2.6.1",
+    "webpack": "^3.1.0",
     "webpack-stream": "^3.2.0"
   }
 }
