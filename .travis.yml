@@ -11,7 +11,9 @@ before_script:
   - sleep 5
 script:
   - npm test
-  - npm run gulp comp && npm run gulp dist && npm run gulp clean
+  - npm run gulp comp
+  - npm run gulp dist
+  - npm run gulp clean
 after_success:
   - sh -e /etc/init.d/xvfb stop
 after_failure:
