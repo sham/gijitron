@@ -1,22 +1,22 @@
 
-var path = require('path')
-var glob = require('glob')
-var slash = require('slash')
-var webpack = require('webpack')
-var UglifyJSPlugin = require('uglifyjs-webpack-plugin')
+var path = require('path');
+var glob = require('glob');
+var slash = require('slash');
+var webpack = require('webpack');
+var UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 
-var jsBasePath = slash(path.resolve('app'))
-var targets = glob.sync(`${jsBasePath}/**/*.{js,jsx}`)
-var entries = {}
+var jsBasePath = slash(path.resolve('app'));
+var targets = glob.sync(`${jsBasePath}/**/*.{js,jsx}`);
+var entries = {};
 targets.forEach(value => {
-  var re = new RegExp(`${jsBasePath}/`)
-  var key = value.replace(re, '').replace(/\.jsx?$/g, '')
+  var re = new RegExp(`${jsBasePath}/`);
+  var key = value.replace(re, '').replace(/\.jsx?$/g, '');
   entries[key] = value;
 });
 
 module.exports = {
   entry: entries,
-  target: "electron",
+  target: 'electron',
   output: {
     path: path.join(__dirname, '_dist'),
     filename: '[name].js'
@@ -27,11 +27,11 @@ module.exports = {
   },
   module: {
     loaders: [
-    {
-      test: /\.jsx?$/,
-      loader: 'babel-loader',
-      exclude: /node_modules/
-    }
+      {
+        test: /\.jsx?$/,
+        loader: 'babel-loader',
+        exclude: /node_modules/
+      }
     ]
   },
   plugins: [

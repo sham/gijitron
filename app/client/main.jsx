@@ -4,8 +4,9 @@ import fs from 'fs';
 import moment from 'moment';
 import React from 'react';
 import ReactDOM from 'react-dom';
+import PropTypes from 'prop-types';
 import {MuiThemeProvider, RaisedButton, TextField} from 'material-ui';
-import Draft, {Editor, EditorState, ContentState, RichUtils, convertToRaw, convertFromRaw, getDefaultKeyBinding, KeyBindingUtil, Modifier} from 'draft-js';
+import {Editor, EditorState, RichUtils, convertToRaw, convertFromRaw, getDefaultKeyBinding, KeyBindingUtil} from 'draft-js';
 import injectTapEventPlugin from 'react-tap-event-plugin';
 injectTapEventPlugin();
 const {hasCommandModifier} = KeyBindingUtil;
@@ -24,15 +25,15 @@ class GijirokuArea extends React.Component {
         return false;
       }
       const settings = JSON.parse(data.toString()
-                                      .replace(/YYYY/g, date.format('YYYY'))
-                                      .replace(/MM/g, date.format('MM'))
-                                      .replace(/DD/g, date.format('DD'))
-                                      .replace(/ddd/g, date.format('ddd')));
+        .replace(/YYYY/g, date.format('YYYY'))
+        .replace(/MM/g, date.format('MM'))
+        .replace(/DD/g, date.format('DD'))
+        .replace(/ddd/g, date.format('ddd')));
       const updatedEditorState = EditorState.createWithContent(convertFromRaw(settings));
       if ('anchorBlock' in settings && 'anchorOffset' in settings) {
         const updatedSelectionState = updatedEditorState.getSelection().merge({
-                                      anchorKey: settings['anchorBlock'],
-                                      anchorOffset: settings['anchorOffset']
+          anchorKey: settings['anchorBlock'],
+          anchorOffset: settings['anchorOffset']
         });
         this.handleChange(EditorState.forceSelection(updatedEditorState, updatedSelectionState));
       } else {
@@ -42,7 +43,7 @@ class GijirokuArea extends React.Component {
     });
   }
   componentDidMount() {
-    this.refs.editor.focus();
+    this.editor.focus();
   }
   handleChange(editorState) {
     this.setState({editorState});
@@ -50,34 +51,40 @@ class GijirokuArea extends React.Component {
   }
   handleKeyCommand(command) {
     switch (command) {
-      case 'header':
+      case 'header': {
         const selectionState = this.state.editorState.getSelection();
         const contentState = this.state.editorState.getCurrentContent();
         const startType = contentState.getBlockForKey(selectionState.getStartKey()).getType();
         const endType = contentState.getBlockForKey(selectionState.getEndKey()).getType();
         if (startType == endType) {
           switch (startType) {
-            case 'unstyled':
+            case 'unstyled': {
               this.handleChange(RichUtils.toggleBlockType(this.state.editorState, 'header-two'));
               return true;
-            case 'header-two':
+            }
+            case 'header-two': {
               this.handleChange(RichUtils.toggleBlockType(this.state.editorState, 'header-three'));
               return true;
-            case 'header-three':
+            }
+            case 'header-three': {
               this.handleChange(RichUtils.toggleBlockType(this.state.editorState, 'header-four'));
               return true;
-            default:
+            }
+            default: {
               break;
+            }
           }
         }
         break;
-      default:
+      }
+      default: {
         const newState = RichUtils.handleKeyCommand(this.state.editorState, command);
         if (newState) {
           this.handleChange(newState);
           return true;
         }
         break;
+      }
     }
     return false;
   }
@@ -104,16 +111,19 @@ class GijirokuArea extends React.Component {
       const tasks = [];
       block['inlineStyleRanges'].forEach((inlineStyle) => {
         switch (inlineStyle['style']) {
-          case 'BOLD':
+          case 'BOLD': {
             tasks.push({'str': '\'\'', 'place': inlineStyle['offset']});
             tasks.push({'str': '\'\'', 'place': inlineStyle['offset'] + inlineStyle['length']});
             break;
-          case 'ITALIC':
+          }
+          case 'ITALIC': {
             tasks.push({'str': '\'\'\'', 'place': inlineStyle['offset']});
             tasks.push({'str': '\'\'\'', 'place': inlineStyle['offset'] + inlineStyle['length']});
             break;
-          default:
+          }
+          default: {
             break;
+          }
         }
       });
       tasks.sort((a, b) => {
@@ -125,37 +135,44 @@ class GijirokuArea extends React.Component {
         temp = temp.slice(0, task.place) + task['str'] + temp.slice(task.place);
       });
       switch (block['type']) {
-        case 'unstyled':
+        case 'unstyled': {
           temp += '~';
           if (preblock == 'unordered-list-item' || preblock == 'ordered-list-item') {
             temp = '\r\n' + temp;
           }
           preblock = 'unstyled';
           break;
-        case 'unordered-list-item':
+        }
+        case 'unordered-list-item': {
           temp = '-'.repeat(block['depth'] + 1) + ' ' + temp;
           preblock = 'unordered-list-item';
           break;
-        case 'ordered-list-item':
+        }
+        case 'ordered-list-item': {
           temp = '+'.repeat(block['depth'] + 1) + ' ' + temp;
           preblock = 'ordered-list-item';
           break;
-        case 'header-two':
+        }
+        case 'header-two': {
           temp = '* ' + temp;
           preblock = 'header-two';
           break;
-        case 'header-three':
+        }
+        case 'header-three': {
           temp = '** ' + temp;
           preblock = 'header-three';
           break;
-        case 'header-four':
+        }
+        case 'header-four': {
           temp = '*** ' + temp;
           preblock = 'header-four';
           break;
-        default:
-          console.log(block['type'] + ' undefined');
+        }
+        default: {
+          // console.log(block['type'] + ' undefined');
           preblock = '';
           break;
+        }
       }
       output += temp + '\r\n';
     });
@@ -163,19 +180,22 @@ class GijirokuArea extends React.Component {
   }
   onTab(e) {
     switch (RichUtils.getCurrentBlockType(this.state.editorState)) {
-      case 'unordered-list-item':
+      case 'unordered-list-item': {
         this.handleChange(RichUtils.onTab(e, this.state.editorState, 2));
         break;
-      case 'ordered-list-item':
+      }
+      case 'ordered-list-item': {
         this.handleChange(RichUtils.onTab(e, this.state.editorState, 2));
         break;
-      default:
+      }
+      default: {
         if (hasCommandModifier(e)) {
           this.handleChange(RichUtils.toggleBlockType(this.state.editorState, 'ordered-list-item'));
         } else {
           this.handleChange(RichUtils.toggleBlockType(this.state.editorState, 'unordered-list-item'));
         }
         break;
+      }
     }
     e.preventDefault();
   }
@@ -183,7 +203,7 @@ class GijirokuArea extends React.Component {
     return (
       <div>
         <Editor 
-          ref='editor' 
+          ref={(ref) => this.editor = ref} 
           editorState={this.state.editorState} 
           onChange={this.handleChange.bind(this)} 
           handleKeyCommand={this.handleKeyCommand.bind(this)} 
@@ -224,6 +244,9 @@ function myKeyBindingFn(e) {
   */
   return getDefaultKeyBinding(e);
 }
+GijirokuArea.propTypes = {
+  buttonLayout: PropTypes.func.isRequired
+};
 
 class GijirokuMaker extends React.Component {
   constructor(props) {
@@ -235,16 +258,16 @@ class GijirokuMaker extends React.Component {
     };
   }
   sizeClicked() {
-    this.refs.gijirokuArea.sizeClicked(this.state.fontSize);
+    this.gijirokuArea.sizeClicked(this.state.fontSize);
   }
   boldClicked() {
-    this.refs.gijirokuArea.boldClicked();
+    this.gijirokuArea.boldClicked();
   }
   italicClicked() {
-    this.refs.gijirokuArea.italicClicked();
+    this.gijirokuArea.italicClicked();
   }
   saveClicked() {
-    this.refs.gijirokuArea.saveClicked();
+    this.gijirokuArea.saveClicked();
   }
   buttonLayout(buttonLayout) {
     this.setState({
@@ -258,14 +281,14 @@ class GijirokuMaker extends React.Component {
   render() {
     return (
       <div id='reactroot'>
-        <GijirokuArea ref='gijirokuArea' buttonLayout={this.buttonLayout.bind(this)} />
+        <GijirokuArea ref={(ref) => this.gijirokuArea = ref} buttonLayout={this.buttonLayout.bind(this)} />
         <MuiThemeProvider>
           <div style={{display: 'flex', justifyContent: 'center'}}>
-            <div style={{margin: '0px 4px', display: 'none'}}><TextField id='sizeInput' value={this.state.fontSize} onChange={(e) => {this.sizeChanged(e)}} type='number' inputStyle={{textAlign: 'left'}} style = {{width: '35px'}} max={99} min={0}></TextField></div>
-            <div style={{margin: '0px 4px', display: 'none'}}><RaisedButton label='Size' id='sizeButton' onMouseDown={(e) => {this.sizeClicked(); e.preventDefault()}} /></div>
-            <div style={{margin: '0px 4px'}}><RaisedButton label='Bold' primary={this.state.boldLayout} id='boldButton'  onMouseDown={(e) => {this.boldClicked(); e.preventDefault()}} /></div>
-            <div style={{margin: '0px 4px'}}><RaisedButton label='Italic' id='italicButton' primary={this.state.italicLayout} onMouseDown={(e) => {this.italicClicked(); e.preventDefault()}} /></div>
-            <div style={{margin: '0px 4px'}}><RaisedButton label='Save' id='saveButton' onMouseDown={(e) => {this.saveClicked(); e.preventDefault()}} /></div>
+            <div style={{margin: '0px 4px', display: 'none'}}><TextField id='sizeInput' value={this.state.fontSize} onChange={(e) => {this.sizeChanged(e);}} type='number' inputStyle={{textAlign: 'left'}} style = {{width: '35px'}} max={99} min={0}></TextField></div>
+            <div style={{margin: '0px 4px', display: 'none'}}><RaisedButton label='Size' id='sizeButton' onMouseDown={(e) => {this.sizeClicked(); e.preventDefault();}} /></div>
+            <div style={{margin: '0px 4px'}}><RaisedButton label='Bold' primary={this.state.boldLayout} id='boldButton'  onMouseDown={(e) => {this.boldClicked(); e.preventDefault();}} /></div>
+            <div style={{margin: '0px 4px'}}><RaisedButton label='Italic' id='italicButton' primary={this.state.italicLayout} onMouseDown={(e) => {this.italicClicked(); e.preventDefault();}} /></div>
+            <div style={{margin: '0px 4px'}}><RaisedButton label='Save' id='saveButton' onMouseDown={(e) => {this.saveClicked(); e.preventDefault();}} /></div>
           </div>
         </MuiThemeProvider>
       </div>

@@ -27,7 +27,7 @@ var ecallback = function(electronProcState) {
   if (electronProcState == 'stopped') {
     electron.start(ecallback);
   }
-}
+};
 gulp.task('erestart', ['comp'], function() {
   electron.restart();
 });
@@ -54,3 +54,10 @@ gulp.task('copy2dist', ['dclean'], function() {
 gulp.task('clean', del.bind(null, ['_comp', '_dist']));
 gulp.task('cclean', del.bind(null, '_comp'));
 gulp.task('dclean', del.bind(null, '_dist'));
+
+gulp.task('lint', function() {
+  return gulp.src(['app/**/*.{js,jsx}', '!node_modules/**'])
+    .pipe($.eslint({useEslintrc: true, fix: true}))
+    .pipe($.eslint.format())
+    .pipe($.if(function(file) {return file.eslint != null && file.eslint.fixed;}, gulp.dest('app')));
+});
