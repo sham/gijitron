@@ -141,46 +141,39 @@ class GijirokuArea extends React.Component {
           if (preblock == 'unordered-list-item' || preblock == 'ordered-list-item') {
             temp = '\r\n' + temp;
           }
-          preblock = 'unstyled';
           break;
         }
         case 'unordered-list-item': {
           temp = '-'.repeat(block['depth'] + 1) + ' ' + temp;
-          preblock = 'unordered-list-item';
           break;
         }
         case 'ordered-list-item': {
           temp = '+'.repeat(block['depth'] + 1) + ' ' + temp;
-          preblock = 'ordered-list-item';
           break;
         }
         case 'header-two': {
           temp = '* ' + temp;
-          preblock = 'header-two';
           break;
         }
         case 'header-three': {
           temp = '** ' + temp;
-          preblock = 'header-three';
           break;
         }
         case 'header-four': {
           temp = '*** ' + temp;
-          preblock = 'header-four';
           break;
         }
         case 'code-block': {
           temp = ' ' + temp;
-          preblock = 'code-block';
           break;
         }
         default: {
           // console.log(block['type'] + ' undefined');
-          preblock = '';
           break;
         }
       }
       output += temp + '\r\n';
+      preblock = block['type'];
     });
     fs.writeFile(path.join(curDir, `/${this.state.eigen}.txt`), output, (err) => {if (err) throw err;});
   }
