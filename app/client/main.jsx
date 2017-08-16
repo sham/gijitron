@@ -169,6 +169,11 @@ class GijirokuArea extends React.Component {
           preblock = 'header-four';
           break;
         }
+        case 'code-block': {
+          temp = ' ' + temp;
+          preblock = 'code-block';
+          break;
+        }
         default: {
           // console.log(block['type'] + ' undefined');
           preblock = '';
