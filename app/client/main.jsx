@@ -71,7 +71,8 @@ class GijirokuArea extends React.Component {
               return true;
             }
             default: {
-              break;
+              this.handleChange(RichUtils.toggleBlockType(this.state.editorState, 'header-two'));
+              return true;
             }
           }
         }
