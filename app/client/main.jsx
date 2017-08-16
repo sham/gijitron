@@ -137,7 +137,9 @@ class GijirokuArea extends React.Component {
       });
       switch (block['type']) {
         case 'unstyled': {
-          temp += '~';
+          if (temp.slice(0, 1) != '#') {
+            temp += '~';
+          }
           if (preblock == 'unordered-list-item' || preblock == 'ordered-list-item') {
             temp = '\r\n' + temp;
           }
