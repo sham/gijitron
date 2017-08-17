@@ -78,6 +78,20 @@ class GijirokuArea extends React.Component {
         }
         break;
       }
+      case 'newline-list-item': {
+        const selectionState = this.state.editorState.getSelection();
+        const contentState = this.state.editorState.getCurrentContent();
+        const startType = contentState.getBlockForKey(selectionState.getStartKey()).getType();
+        const endType = contentState.getBlockForKey(selectionState.getEndKey()).getType();
+        if (startType == endType && (startType == 'unordered-list-item' || startType == 'ordered-list-item')) {
+          const newState = RichUtils.insertSoftNewline(this.state.editorState);
+          if (newState) {
+            this.handleChange(newState);
+            return true;
+          }
+        }
+        break;
+      }
       default: {
         const newState = RichUtils.handleKeyCommand(this.state.editorState, command);
         if (newState) {
@@ -108,7 +122,7 @@ class GijirokuArea extends React.Component {
     let output = '';
     let preblock = '';
     contentObject['blocks'].forEach((block) => {
-      let temp = block['text'];
+      let text = block['text'];
       const tasks = [];
       block['inlineStyleRanges'].forEach((inlineStyle) => {
         switch (inlineStyle['style']) {
@@ -133,40 +147,40 @@ class GijirokuArea extends React.Component {
         return 0;
       });
       tasks.forEach((task) => {
-        temp = temp.slice(0, task.place) + task['str'] + temp.slice(task.place);
+        text = text.slice(0, task.place) + task['str'] + text.slice(task.place);
       });
       switch (block['type']) {
         case 'unstyled': {
-          if (temp.slice(0, 1) != '#') {
-            temp += '~';
+          if (text.slice(0, 1) != '#') {
+            text += '~';
           }
           if (preblock == 'unordered-list-item' || preblock == 'ordered-list-item') {
-            temp = '\r\n' + temp;
+            text = '\r\n' + text;
           }
           break;
         }
         case 'unordered-list-item': {
-          temp = '-'.repeat(block['depth'] + 1) + ' ' + temp;
+          text = '-'.repeat(block['depth'] + 1) + ' ' + text.replace(/\n/g, '~\r\n');
           break;
         }
         case 'ordered-list-item': {
-          temp = '+'.repeat(block['depth'] + 1) + ' ' + temp;
+          text = '+'.repeat(block['depth'] + 1) + ' ' + text.replace(/\n/g, '~\r\n');
           break;
         }
         case 'header-two': {
-          temp = '* ' + temp;
+          text = '* ' + text;
           break;
         }
         case 'header-three': {
-          temp = '** ' + temp;
+          text = '** ' + text;
           break;
         }
         case 'header-four': {
-          temp = '*** ' + temp;
+          text = '*** ' + text;
           break;
         }
         case 'code-block': {
-          temp = ' ' + temp;
+          text = ' ' + text;
           break;
         }
         default: {
@@ -174,7 +188,7 @@ class GijirokuArea extends React.Component {
           break;
         }
       }
-      output += temp + '\r\n';
+      output += text + '\r\n';
       preblock = block['type'];
     });
     fs.writeFile(path.join(curDir, `/${this.state.eigen}.txt`), output, (err) => {if (err) throw err;});
@@ -236,13 +250,11 @@ function myKeyBindingFn(e) {
   if (e.nativeEvent.altKey) {
     return 'header';
   }
-  /*
-  if (e.keyCode == 32 || e.keyCode == 229) {
-    if (e.nativeEvent.shiftKey) {
-      return 'code';
+  if (e.nativeEvent.shiftKey) {
+    if (e.keyCode == 13) {
+      return 'newline-list-item';
     }
   }
-  */
   return getDefaultKeyBinding(e);
 }
 GijirokuArea.propTypes = {
