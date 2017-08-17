@@ -1,6 +1,6 @@
 {
   "name": "gijitron",
-  "version": "0.1.6",
+  "version": "0.1.7",
   "description": "An editor for minutes on PukiWiki.",
   "main": "app/main.js",
   "scripts": {
