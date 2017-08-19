@@ -1,7 +1,7 @@
 {
   "name": "gijitron",
   "version": "0.1.8",
-  "description": "An editor for minutes on PukiWiki.",
+  "description": "gijitron is an editor to take the minutes of a meeting.",
   "main": "app/main.js",
   "scripts": {
     "test": "gulp comp && node test/test.js",
