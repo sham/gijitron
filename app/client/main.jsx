@@ -50,41 +50,34 @@ class GijirokuArea extends React.Component {
     this.props.buttonLayout(editorState.getCurrentInlineStyle().toArray());
   }
   handleKeyCommand(command) {
+    const editorState = this.state.editorState;
+    const selectionState = editorState.getSelection();
+    const contentState = editorState.getCurrentContent();
+    const focusBlockType = contentState.getBlockForKey(selectionState.getFocusKey()).getType();
     switch (command) {
       case 'header': {
-        const selectionState = this.state.editorState.getSelection();
-        const contentState = this.state.editorState.getCurrentContent();
-        const startType = contentState.getBlockForKey(selectionState.getStartKey()).getType();
-        const endType = contentState.getBlockForKey(selectionState.getEndKey()).getType();
-        if (startType == endType) {
-          switch (startType) {
-            case 'unstyled': {
-              this.handleChange(RichUtils.toggleBlockType(this.state.editorState, 'header-two'));
-              return true;
-            }
-            case 'header-two': {
-              this.handleChange(RichUtils.toggleBlockType(this.state.editorState, 'header-three'));
-              return true;
-            }
-            case 'header-three': {
-              this.handleChange(RichUtils.toggleBlockType(this.state.editorState, 'header-four'));
-              return true;
-            }
-            default: {
-              this.handleChange(RichUtils.toggleBlockType(this.state.editorState, 'header-two'));
-              return true;
-            }
+        switch (focusBlockType) {
+          case 'unstyled': {
+            this.handleChange(RichUtils.toggleBlockType(editorState, 'header-two'));
+            return true;
+          }
+          case 'header-two': {
+            this.handleChange(RichUtils.toggleBlockType(editorState, 'header-three'));
+            return true;
+          }
+          case 'header-three': {
+            this.handleChange(RichUtils.toggleBlockType(editorState, 'header-four'));
+            return true;
+          }
+          default: {
+            this.handleChange(RichUtils.toggleBlockType(editorState, 'header-two'));
+            return true;
           }
         }
-        break;
       }
       case 'soft-return': {
-        const selectionState = this.state.editorState.getSelection();
-        const contentState = this.state.editorState.getCurrentContent();
-        const startType = contentState.getBlockForKey(selectionState.getStartKey()).getType();
-        const endType = contentState.getBlockForKey(selectionState.getEndKey()).getType();
-        if (startType == endType && (startType == 'unordered-list-item' || startType == 'ordered-list-item')) {
-          const newState = RichUtils.insertSoftNewline(this.state.editorState);
+        if (['unordered-list-item', 'ordered-list-item'].includes(focusBlockType)) {
+          const newState = RichUtils.insertSoftNewline(editorState);
           if (newState) {
             this.handleChange(newState);
             return true;
@@ -93,7 +86,7 @@ class GijirokuArea extends React.Component {
         break;
       }
       default: {
-        const newState = RichUtils.handleKeyCommand(this.state.editorState, command);
+        const newState = RichUtils.handleKeyCommand(editorState, command);
         if (newState) {
           this.handleChange(newState);
           return true;
@@ -154,7 +147,7 @@ class GijirokuArea extends React.Component {
           if (!text.slice(0, 1).match(/(#|:)/g)) {
             text += '~';
           }
-          if (preblock == 'unordered-list-item' || preblock == 'ordered-list-item') {
+          if (['unordered-list-item', 'ordered-list-item'].includes(preblock)) {
             text = '\r\n' + text;
           }
           break;
@@ -194,20 +187,21 @@ class GijirokuArea extends React.Component {
     fs.writeFile(path.join(curDir, `/${this.state.eigen}.txt`), output, (err) => {if (err) throw err;});
   }
   onTab(e) {
-    switch (RichUtils.getCurrentBlockType(this.state.editorState)) {
+    const editorState = this.state.editorState;
+    switch (RichUtils.getCurrentBlockType(editorState)) {
       case 'unordered-list-item': {
-        this.handleChange(RichUtils.onTab(e, this.state.editorState, 2));
+        this.handleChange(RichUtils.onTab(e, editorState, 2));
         break;
       }
       case 'ordered-list-item': {
-        this.handleChange(RichUtils.onTab(e, this.state.editorState, 2));
+        this.handleChange(RichUtils.onTab(e, editorState, 2));
         break;
       }
       default: {
         if (hasCommandModifier(e)) {
-          this.handleChange(RichUtils.toggleBlockType(this.state.editorState, 'ordered-list-item'));
+          this.handleChange(RichUtils.toggleBlockType(editorState, 'ordered-list-item'));
         } else {
-          this.handleChange(RichUtils.toggleBlockType(this.state.editorState, 'unordered-list-item'));
+          this.handleChange(RichUtils.toggleBlockType(editorState, 'unordered-list-item'));
         }
         break;
       }
