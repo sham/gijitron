@@ -78,7 +78,7 @@ class GijirokuArea extends React.Component {
         }
         break;
       }
-      case 'newline-list-item': {
+      case 'soft-return': {
         const selectionState = this.state.editorState.getSelection();
         const contentState = this.state.editorState.getCurrentContent();
         const startType = contentState.getBlockForKey(selectionState.getStartKey()).getType();
@@ -252,7 +252,7 @@ function myKeyBindingFn(e) {
   }
   if (e.nativeEvent.shiftKey) {
     if (e.keyCode == 13) {
-      return 'newline-list-item';
+      return 'soft-return';
     }
   }
   return getDefaultKeyBinding(e);
