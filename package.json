@@ -1,6 +1,6 @@
 {
   "name": "gijitron",
-  "version": "0.1.9",
+  "version": "0.1.10",
   "description": "gijitron is an editor to take the minutes of a meeting.",
   "main": "app/main.js",
   "scripts": {
@@ -8,7 +8,7 @@
     "lint": "gulp lint",
     "start": "gulp start",
     "gulp": "gulp",
-    "pack": "gulp dist && electron-packager _dist gijitron --electron-version=1.7.6 --platform=win32,darwin,linux --arch=x64 --asar"
+    "pack": "gulp dist && electron-packager _dist gijitron --electron-version=1.7.8 --platform=win32,darwin,linux --arch=x64 --asar"
   },
   "repository": {
     "type": "git",
