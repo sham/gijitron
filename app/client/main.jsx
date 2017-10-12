@@ -19,7 +19,7 @@ class GijirokuArea extends React.Component {
       editorState: EditorState.createEmpty(),
       eigen: date.format('YYYYMMDD_HHmmss')
     };
-    const settingsPath = path.join(path.dirname(remote.app.getPath('exe')), '/gijiroku/.settings');
+    const settingsPath = path.join(remote.app.getPath('userData'), '/gijiroku/.settings');
     fs.readFile(settingsPath, (err, data) => {
       if (err) {
         return false;
@@ -105,7 +105,7 @@ class GijirokuArea extends React.Component {
     this.handleChange(RichUtils.toggleInlineStyle(this.state.editorState, 'ITALIC'));
   }
   saveClicked() {
-    const curDir = path.join(path.dirname(remote.app.getPath('exe')), '/gijiroku');
+    const curDir = path.join(remote.app.getPath('userData'), '/gijiroku');
     if (!fs.existsSync(curDir)) {
       fs.mkdirSync(curDir);
     }
