@@ -208,6 +208,22 @@ class GijirokuArea extends React.Component {
     }
     e.preventDefault();
   }
+  handleDroppedFiles(selection, files) {
+    const filePath = files[0].path;
+    if (filePath.match(/\.json$/i) != null) {
+      fs.readFile(filePath, (err, data) => {
+        if (err) {
+          return 'not-handled';
+        }
+        const parsedData = JSON.parse(data.toString());
+        const updatedEditorState = EditorState.createWithContent(convertFromRaw(parsedData));
+        this.handleChange(updatedEditorState);
+        const date = moment().locale('ja');
+        this.setState({eigen: date.format('YYYYMMDD_HHmmss')});
+        return 'handled';
+      });
+    }
+  }
   render() {
     return (
       <div>
@@ -219,6 +235,7 @@ class GijirokuArea extends React.Component {
           onTab={this.onTab.bind(this)} 
           blockStyleFn={myBlockStyleFn} 
           keyBindingFn={myKeyBindingFn} 
+          handleDroppedFiles={this.handleDroppedFiles.bind(this)}
         />
       </div>
     );

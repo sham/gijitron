@@ -9,8 +9,11 @@
   <body>
     <div id="container"></div>
     <script>
-      window.onload = function(){
+      window.onload = function() {
         require("./client/main.js")
+      }
+      document.ondragover = document.ondrop = function(e) {
+        e.preventDefault()
       }
     </script>
     <!-- build:remove-->
