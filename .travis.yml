@@ -20,9 +20,10 @@ after_failure:
   - sh -e /etc/init.d/xvfb stop
 before_deploy:
   - sudo dpkg --add-architecture i386
-  - sudo add-apt-repository ppa:wine/wine-builds -y
+  - wget -q -O - https://dl.winehq.org/wine-builds/Release.key | sudo apt-key add -
+  - sudo apt-add-repository https://dl.winehq.org/wine-builds/ubuntu/
   - sudo apt-get update
-  - sudo apt-get install --install-recommends winehq-staging -y
+  - sudo apt-get install --install-recommends winehq-stable -y
   - npm run pack
   - zip -9 -r gijitron-win32-x64.zip gijitron-win32-x64
   - zip -9 -r gijitron-darwin-x64.zip gijitron-darwin-x64
