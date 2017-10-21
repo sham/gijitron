@@ -8,7 +8,10 @@
     "lint": "gulp lint",
     "start": "gulp start",
     "gulp": "gulp",
-    "pack": "gulp dist && electron-packager _dist gijitron --electron-version=1.7.9 --platform=win32,darwin,linux --arch=x64 --asar"
+    "pack": "gulp dist && npm run pack:win32 && npm run pack:darwin && npm run pack:linux",
+    "pack:win32": "electron-packager _dist gijitron --platform=win32 --arch=x64 --asar",
+    "pack:darwin": "electron-packager _dist gijitron --platform=darwin --arch=x64 --asar",
+    "pack:linux": "electron-packager _dist gijitron --platform=linux --arch=x64 --asar"
   },
   "repository": {
     "type": "git",
