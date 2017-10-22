@@ -1,4 +1,4 @@
-import {remote} from 'electron';
+import {remote, shell} from 'electron';
 import path from 'path';
 import fs from 'fs';
 import moment from 'moment';
@@ -186,6 +186,13 @@ class GijirokuArea extends React.Component {
     });
     fs.writeFile(path.join(curDir, `/${this.state.eigen}.txt`), output, (err) => {if (err) throw err;});
   }
+  openClicked() {
+    const curDir = path.join(remote.app.getPath('userData'), '/gijiroku');
+    if (!fs.existsSync(curDir)) {
+      fs.mkdirSync(curDir);
+    }
+    shell.openExternal(curDir);
+  }
   onTab(e) {
     const editorState = this.state.editorState;
     switch (RichUtils.getCurrentBlockType(editorState)) {
@@ -293,6 +300,9 @@ class GijirokuMaker extends React.Component {
   saveClicked() {
     this.gijirokuArea.saveClicked();
   }
+  openClicked() {
+    this.gijirokuArea.openClicked();
+  }
   buttonLayout(buttonLayout) {
     this.setState({
       boldLayout: buttonLayout.includes('BOLD'),
@@ -313,6 +323,7 @@ class GijirokuMaker extends React.Component {
             <div style={{margin: '0px 4px'}}><RaisedButton label='Bold' primary={this.state.boldLayout} id='boldButton'  onMouseDown={(e) => {this.boldClicked(); e.preventDefault();}} /></div>
             <div style={{margin: '0px 4px'}}><RaisedButton label='Italic' id='italicButton' primary={this.state.italicLayout} onMouseDown={(e) => {this.italicClicked(); e.preventDefault();}} /></div>
             <div style={{margin: '0px 4px'}}><RaisedButton label='Save' id='saveButton' onMouseDown={(e) => {this.saveClicked(); e.preventDefault();}} /></div>
+            <div style={{margin: '0px 4px'}}><RaisedButton label='Open' id='openButton' onMouseDown={(e) => {this.openClicked(); e.preventDefault();}} /></div>
           </div>
         </MuiThemeProvider>
       </div>
