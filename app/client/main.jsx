@@ -115,7 +115,7 @@ class GijirokuArea extends React.Component {
     let output = '';
     let preblock = '';
     contentObject['blocks'].forEach((block) => {
-      let text = block['text'].replace(/\n/g, '\r\n');
+      let text = block['text'];
       const tasks = [];
       block['inlineStyleRanges'].forEach((inlineStyle) => {
         switch (inlineStyle['style']) {
@@ -142,6 +142,7 @@ class GijirokuArea extends React.Component {
       tasks.forEach((task) => {
         text = text.slice(0, task.place) + task['str'] + text.slice(task.place);
       });
+      text = text.replace(/\n/g, '\r\n');
       switch (block['type']) {
         case 'unstyled': {
           if (text.match(/^(#|:)/) == null) {
