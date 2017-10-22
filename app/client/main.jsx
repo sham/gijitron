@@ -115,7 +115,7 @@ class GijirokuArea extends React.Component {
     let output = '';
     let preblock = '';
     contentObject['blocks'].forEach((block) => {
-      let text = block['text'];
+      let text = block['text'].replace(/\n/g, '\r\n');
       const tasks = [];
       block['inlineStyleRanges'].forEach((inlineStyle) => {
         switch (inlineStyle['style']) {
@@ -144,7 +144,7 @@ class GijirokuArea extends React.Component {
       });
       switch (block['type']) {
         case 'unstyled': {
-          if (!text.slice(0, 1).match(/(#|:)/g)) {
+          if (text.match(/^(#|:)/) == null) {
             text += '~';
           }
           if (['unordered-list-item', 'ordered-list-item'].includes(preblock)) {
@@ -153,11 +153,11 @@ class GijirokuArea extends React.Component {
           break;
         }
         case 'unordered-list-item': {
-          text = '-'.repeat(block['depth'] + 1) + ' ' + text.replace(/\n/g, '~\r\n');
+          text = '-'.repeat(block['depth'] + 1) + ' ' + text.replace(/\r\n/g, '~\r\n');
           break;
         }
         case 'ordered-list-item': {
-          text = '+'.repeat(block['depth'] + 1) + ' ' + text.replace(/\n/g, '~\r\n');
+          text = '+'.repeat(block['depth'] + 1) + ' ' + text.replace(/\r\n/g, '~\r\n');
           break;
         }
         case 'header-two': {
