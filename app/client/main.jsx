@@ -5,7 +5,7 @@ import moment from 'moment';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
-import {MuiThemeProvider, RaisedButton, TextField} from 'material-ui';
+import {MuiThemeProvider, RaisedButton, TextField, CircularProgress} from 'material-ui';
 import {Editor, EditorState, RichUtils, convertToRaw, convertFromRaw, getDefaultKeyBinding, KeyBindingUtil} from 'draft-js';
 import injectTapEventPlugin from 'react-tap-event-plugin';
 injectTapEventPlugin();
@@ -104,13 +104,13 @@ class GijirokuArea extends React.Component {
   italicClicked() {
     this.handleChange(RichUtils.toggleInlineStyle(this.state.editorState, 'ITALIC'));
   }
-  saveClicked() {
+  saveClicked(saveCompleted) {
     const curDir = path.join(remote.app.getPath('userData'), '/gijiroku');
     if (!fs.existsSync(curDir)) {
       fs.mkdirSync(curDir);
     }
     const contentJson = JSON.stringify(convertToRaw(this.state.editorState.getCurrentContent()),  null, '  ');
-    fs.writeFile(path.join(curDir, `/${this.state.eigen}.json`), contentJson, (err) => {if (err) throw err;});
+    fs.writeFile(path.join(curDir, `/${this.state.eigen}.json`), contentJson, (err) => {if (err) throw err; saveCompleted('json');});
     const contentObject = JSON.parse(contentJson);
     let output = '';
     let preblock = '';
@@ -185,7 +185,7 @@ class GijirokuArea extends React.Component {
       output += text + '\r\n';
       preblock = block['type'];
     });
-    fs.writeFile(path.join(curDir, `/${this.state.eigen}.txt`), output, (err) => {if (err) throw err;});
+    fs.writeFile(path.join(curDir, `/${this.state.eigen}.txt`), output, (err) => {if (err) throw err; saveCompleted('txt');});
   }
   openClicked() {
     const curDir = path.join(remote.app.getPath('userData'), '/gijiroku');
@@ -286,7 +286,10 @@ class GijirokuMaker extends React.Component {
     this.state = {
       boldLayout: false,
       italicLayout: false,
-      fontSize: 16
+      fontSize: 16,
+      saving: false,
+      jsonSaved: false,
+      txtSaved: false
     };
   }
   sizeClicked() {
@@ -299,7 +302,32 @@ class GijirokuMaker extends React.Component {
     this.gijirokuArea.italicClicked();
   }
   saveClicked() {
-    this.gijirokuArea.saveClicked();
+    if (!(this.state.saving || this.state.jsonSaved || this.state.txtSaved)) {
+      this.setState({
+        saving: true,
+        jsonSaved: false,
+        txtSaved: false
+      });
+      this.gijirokuArea.saveClicked(this.saveCompleted.bind(this));
+    }
+  }
+  saveCompleted(identifier) {
+    if (identifier == 'json') {
+      this.setState({jsonSaved: true});
+    }
+    if (identifier == 'txt') {
+      this.setState({txtSaved: true});
+    }
+    if (this.state.jsonSaved && this.state.txtSaved) {
+      this.setState({saving: false});
+      setTimeout(() => {
+        this.setState({
+          saving: false,
+          jsonSaved: false,
+          txtSaved: false
+        });
+      }, 2000);
+    }
   }
   openClicked() {
     this.gijirokuArea.openClicked();
@@ -323,7 +351,8 @@ class GijirokuMaker extends React.Component {
             <div style={{margin: '0px 4px', display: 'none'}}><RaisedButton label='Size' id='sizeButton' onMouseDown={(e) => {this.sizeClicked(); e.preventDefault();}} /></div>
             <div style={{margin: '0px 4px'}}><RaisedButton label='Bold' primary={this.state.boldLayout} id='boldButton'  onMouseDown={(e) => {this.boldClicked(); e.preventDefault();}} /></div>
             <div style={{margin: '0px 4px'}}><RaisedButton label='Italic' id='italicButton' primary={this.state.italicLayout} onMouseDown={(e) => {this.italicClicked(); e.preventDefault();}} /></div>
-            <div style={{margin: '0px 4px'}}><RaisedButton label='Save' id='saveButton' onMouseDown={(e) => {this.saveClicked(); e.preventDefault();}} /></div>
+            <div style={{margin: '0px 4px'}}><RaisedButton label='Save' disabled={this.state.saving} backgroundColor={(this.state.jsonSaved && this.state.txtSaved) ? '#a4c639' : '#FFFFFF'} id='saveButton' onMouseDown={(e) => {this.saveClicked(); e.preventDefault();}} />
+              {this.state.saving && <CircularProgress style={{position: 'absolute', marginLeft: -56, marginTop: 6}} size={24} />}</div>
             <div style={{margin: '0px 4px'}}><RaisedButton label='Open' id='openButton' onMouseDown={(e) => {this.openClicked(); e.preventDefault();}} /></div>
           </div>
         </MuiThemeProvider>
