@@ -351,7 +351,7 @@ class GijirokuMaker extends React.Component {
             <div style={{margin: '0px 4px', display: 'none'}}><RaisedButton label='Size' id='sizeButton' onMouseDown={(e) => {this.sizeClicked(); e.preventDefault();}} /></div>
             <div style={{margin: '0px 4px'}}><RaisedButton label='Bold' primary={this.state.boldLayout} id='boldButton'  onMouseDown={(e) => {this.boldClicked(); e.preventDefault();}} /></div>
             <div style={{margin: '0px 4px'}}><RaisedButton label='Italic' id='italicButton' primary={this.state.italicLayout} onMouseDown={(e) => {this.italicClicked(); e.preventDefault();}} /></div>
-            <div style={{margin: '0px 4px'}}><RaisedButton label='Save' disabled={this.state.saving} backgroundColor={(this.state.jsonSaved && this.state.txtSaved) ? '#a4c639' : '#FFFFFF'} id='saveButton' onMouseDown={(e) => {this.saveClicked(); e.preventDefault();}} />
+            <div style={{margin: '0px 4px'}}><RaisedButton label='Save' disabled={this.state.saving} backgroundColor={(this.state.jsonSaved && this.state.txtSaved) ? '#21BA45' : '#FFFFFF'} id='saveButton' onMouseDown={(e) => {this.saveClicked(); e.preventDefault();}} />
               {this.state.saving && <CircularProgress style={{position: 'absolute', marginLeft: -56, marginTop: 6}} size={24} />}</div>
             <div style={{margin: '0px 4px'}}><RaisedButton label='Open' id='openButton' onMouseDown={(e) => {this.openClicked(); e.preventDefault();}} /></div>
           </div>
