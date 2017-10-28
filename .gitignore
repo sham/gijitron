@@ -1,4 +1,10 @@
-/node_modules
-/_comp
-/_dist
-/gijiroku
+# build output
+dist
+app/renderer/.next
+app/renderer/out
+
+# dependencies
+node_modules
+
+# logs
+npm-debug.log

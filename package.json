@@ -2,16 +2,14 @@
   "name": "gijitron",
   "version": "0.3.3",
   "description": "gijitron is an editor to take the minutes of a meeting.",
-  "main": "app/main.js",
+  "main": "app/main/index.js",
   "scripts": {
-    "test": "gulp comp && node test/test.js",
-    "lint": "gulp lint",
-    "start": "gulp start",
-    "gulp": "gulp",
-    "pack": "gulp dist && npm run pack:win32 && npm run pack:darwin && npm run pack:linux",
-    "pack:win32": "electron-packager _dist gijitron --platform=win32 --arch=x64 --asar",
-    "pack:darwin": "electron-packager _dist gijitron --platform=darwin --arch=x64 --asar",
-    "pack:linux": "electron-packager _dist gijitron --platform=linux --arch=x64 --asar"
+    "start": "electron .",
+    "build": "next build app/renderer && next export app/renderer",
+    "dist": "yarn run build && build --x64 --publish=never",
+    "lint": "eslint app/**",
+    "lint:fix": "yarn run lint --fix",
+    "test": "echo \"Error: no test specified\""
   },
   "repository": {
     "type": "git",
@@ -23,47 +21,49 @@
     "url": "https://github.com/shamofu/gijitron/issues"
   },
   "homepage": "https://github.com/shamofu/gijitron#readme",
-  "babel": {
-    "sourceMaps": "inline",
-    "presets": [
-      "es2015",
-      "react",
-      "stage-0"
-    ]
-  },
   "devDependencies": {
-    "asar": "^0.13.0",
-    "babel-core": "^6.26.0",
-    "babel-loader": "^7.1.2",
-    "babel-preset-es2015": "^6.24.1",
-    "babel-preset-react": "^6.24.1",
-    "babel-preset-stage-0": "^6.24.1",
-    "caniuse-api": "^2.0.0",
-    "del": "^3.0.0",
+    "autoprefixer": "^7.1.6",
+    "babel-plugin-module-resolver": "^2.7.1",
+    "babel-plugin-wrap-in-js": "^1.1.1",
     "draft-js": "^0.10.4",
     "electron": "^1.7.9",
-    "electron-connect": "^0.6.2",
-    "electron-packager": "^9.1.0",
+    "electron-builder": "^19.42.2",
     "eslint": "^4.9.0",
     "eslint-plugin-react": "^7.4.0",
-    "gulp": "^3.9.1",
-    "gulp-babel": "^7.0.0",
-    "gulp-eslint": "^4.0.0",
-    "gulp-if": "^2.0.2",
-    "gulp-load-plugins": "^1.5.0",
-    "gulp-useref": "^3.1.2",
+    "glob": "^7.1.2",
     "material-ui": "^0.19.4",
     "moment": "^2.19.1",
+    "next": "^4.1.3",
+    "node-sass": "^4.5.3",
+    "normalize.css": "^7.0.0",
+    "postcss-easy-import": "^3.0.0",
+    "postcss-loader": "^2.0.8",
     "prop-types": "^15.6.0",
-    "rcedit": "^0.9.0",
+    "raw-loader": "^0.5.1",
     "react": "^16.0.0",
     "react-dom": "^16.0.0",
-    "react-tap-event-plugin": "^3.0.2",
-    "slash": "^1.0.0",
-    "spectron": "^3.7.2",
-    "uglify-js": "^3.1.5",
-    "uglifyjs-webpack-plugin": "^1.0.1",
-    "webpack": "^3.8.1",
-    "webpack-stream": "^4.0.0"
+    "react-no-ssr": "^1.1.0",
+    "sass-loader": "^6.0.6"
+  },
+  "dependencies": {
+    "app-root-path": "^2.0.1",
+    "electron-is-dev": "^0.3.0",
+    "electron-next": "^3.1.3"
+  },
+  "build": {
+    "files": [
+      "app/**/*",
+      "!app/renderer",
+      "app/renderer/out"
+    ],
+    "win": {
+      "target": "dir"
+    },
+    "mac": {
+      "target": "dir"
+    },
+    "linux": {
+      "target": "dir"
+    }
   }
 }
