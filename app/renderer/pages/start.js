@@ -4,7 +4,6 @@ import fs from 'fs';
 import moment from 'moment';
 import React from 'react';
 import PropTypes from 'prop-types';
-import NoSSR from 'react-no-ssr';
 import {MuiThemeProvider, RaisedButton, TextField, CircularProgress} from 'material-ui';
 import {Editor, EditorState, RichUtils, convertToRaw, convertFromRaw, getDefaultKeyBinding, KeyBindingUtil} from 'draft-js';
 const {hasCommandModifier} = KeyBindingUtil;
@@ -376,4 +375,29 @@ function myKeyBindingFn(e) {
 }
 GijirokuArea.propTypes = {
   buttonLayout: PropTypes.func.isRequired
+};
+
+class NoSSR extends React.Component {
+  constructor(...args) {
+    super(...args);
+    this.state = {
+      canRender: false
+    };
+  }
+
+  componentDidMount() {
+    this.setState({canRender: true});
+  }
+
+  render() {
+    const DefaultOnSSR = () => (<span></span>);
+    const { children, onSSR = <DefaultOnSSR />} = this.props;
+    const { canRender } = this.state;
+
+    return canRender ? children : onSSR;
+  }
+}
+NoSSR.propTypes = {
+  children: PropTypes.element.isRequired,
+  onSSR: PropTypes.element
 };
