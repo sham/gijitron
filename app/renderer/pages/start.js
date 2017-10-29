@@ -21,7 +21,7 @@ export default class extends React.Component {
         <title>gijitron</title>
         <style dangerouslySetInnerHTML={{ __html: draftStylesheet }} />
         <style dangerouslySetInnerHTML={{ __html: stylesheet }} />
-        <script dangerouslySetInnerHTML={{ __html: disableDnD}} />
+        <script dangerouslySetInnerHTML={{ __html: disableDnD }} />
       </Head>
       <NoSSR>
         <GijirokuMaker />
