@@ -386,12 +386,12 @@ class NoSSR extends React.Component {
   }
 
   componentDidMount() {
-    this.setState({canRender: true});
+    this.setState({ canRender: true });
   }
 
   render() {
     const DefaultOnSSR = () => (<span></span>);
-    const { children, onSSR = <DefaultOnSSR />} = this.props;
+    const { children, onSSR = <DefaultOnSSR /> } = this.props;
     const { canRender } = this.state;
 
     return canRender ? children : onSSR;
