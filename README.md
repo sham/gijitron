@@ -1,7 +1,7 @@
 # gijitron
 
-[![Build Status](https://travis-ci.org/shamofu/gijitron.svg?branch=master)](https://travis-ci.org/shamofu/gijitron) [![dependencies Status](https://david-dm.org/shamofu/gijitron/status.svg)](https://david-dm.org/shamofu/gijitron)
-[![devDependencies Status](https://david-dm.org/shamofu/gijitron/dev-status.svg)](https://david-dm.org/shamofu/gijitron?type=dev)
+[![Build Status](https://img.shields.io/travis/shamofu/gijitron/master.svg?style=flat-square)](https://travis-ci.org/shamofu/gijitron) [![dependencies Status](https://img.shields.io/david/shamofu/gijitron.svg?style=flat-square)](https://david-dm.org/shamofu/gijitron)
+[![devDependencies Status](https://img.shields.io/david/dev/shamofu/gijitron.svg?style=flat-square)](https://david-dm.org/shamofu/gijitron?type=dev)
 
 ## Description
 
