@@ -15,11 +15,13 @@ import draftStylesheet from '../styles/Draft.css';
 
 export default class extends React.Component {
   render() {
+    const disableDnD = 'document.ondragover = document.ondrop = function(e) { e.preventDefault() }';
     return (<div id='container'>
       <Head>
         <title>gijitron</title>
         <style dangerouslySetInnerHTML={{ __html: draftStylesheet }} />
         <style dangerouslySetInnerHTML={{ __html: stylesheet }} />
+        <script dangerouslySetInnerHTML={{ __html: disableDnD}} />
       </Head>
       <NoSSR>
         <GijirokuMaker />
