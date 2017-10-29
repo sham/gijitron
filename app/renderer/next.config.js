@@ -4,13 +4,6 @@ const glob = require('glob');
 module.exports = {
   webpack(config) {
     config.target = 'electron-renderer';
-    config.plugins = config.plugins.filter((plugin) => {
-      if (plugin.constructor.name === 'UglifyJsPlugin') {
-        return false;
-      } else {
-        return true;
-      }
-    });
     config.module.rules.push(
       {
         test: /\.(css|scss)$/,
