@@ -14,9 +14,9 @@ script:
   - yarn test
 before_deploy:
   - yarn run dist -mwl
-  - cd dist/win-unpacked && zip -9 -r ${APP_NAME}-win-x64.zip . && cd ../..
-  - cd dist/mac && zip -9 -r ${APP_NAME}-mac-x64.zip . && cd ../..
-  - cd dist/linux-unpacked && zip -9 -r ${APP_NAME}-linux-x64.zip . && cd ../..
+  - cd dist/win-unpacked && zip -9 -ry ${APP_NAME}-win-x64.zip . && cd ../..
+  - cd dist/mac && zip -9 -ry ${APP_NAME}-mac-x64.zip . && cd ../..
+  - cd dist/linux-unpacked && zip -9 -ry ${APP_NAME}-linux-x64.zip . && cd ../..
 deploy:
   provider: releases
   api_key:
