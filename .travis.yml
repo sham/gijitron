@@ -3,25 +3,28 @@ node_js: lts/*
 os: osx
 osx_image: xcode9.1
 env:
-  - CSC_IDENTITY_AUTO_DISCOVERY=false
+  global:
+    - APP_NAME=gijitron
+    - CSC_IDENTITY_AUTO_DISCOVERY=false
+before_install:
+  - brew update
 install:
   - yarn install
 script:
   - yarn test
 before_deploy:
-  - brew update && brew install wine
   - yarn run dist -mwl
-  - cd dist/win-unpacked && zip -9 -r gijitron-win-x64.zip . && cd ../..
-  - cd dist/mac && zip -9 -r gijitron-mac-x64.zip . && cd ../..
-  - cd dist/linux-unpacked && zip -9 -r gijitron-linux-x64.zip . && cd ../..
+  - cd dist/win-unpacked && zip -9 -r ${APP_NAME}-win-x64.zip . && cd ../..
+  - cd dist/mac && zip -9 -r ${APP_NAME}-mac-x64.zip . && cd ../..
+  - cd dist/linux-unpacked && zip -9 -r ${APP_NAME}-linux-x64.zip . && cd ../..
 deploy:
   provider: releases
   api_key:
     secure: e9XfUJMpzMWanD4Ws3gknIkXZ1KRot7h/Oz/kTRGciPzqQ/vKCxx6BZ2eyJtUKqTkGu5zNBLztbu6P7xdg4WqyWdU3P6lb58awyDc/qcutQmrrhuC1+HHkkCucAGV+abHrQHCqbDFkNf+M/Gckm1PWP9JCHV1BpIxO7T8rYBLeDbM8lvXFBX7P8lC6Afwb84zN5FNeuABmdZAvBleXAJcXJjy5QW3xc4HnG5bYuXdD4YwW69ZONbUwcwtbszDYqF3P4e1dZZqGcvsErkMxZOWeVQn7peWQXfulBrsSG3BwvM6UANbQeQdMlc1cF+WTS6AAaXqhTuwfohKR7h7A67lktI/btCQZXdFe0v37Un3SitII/MsitHOMinCE6fEPHOVnp39P/oefPNPCLWjbGy1ueGdQ9oQSbs8TERDhRmUwQ4N8Yfo5mW+1ZtMS7VUC33iO3NYK8JxbzrSSO5Vb8wj+y4Io/VWKj/nR8fN3xV/1/XLGoO3zdqb5q+XtCTmQwzRJPP9G2unAf4brNuUmIu0pSDXeN6Wzqi84APbl4UudbyWKKycymuGfbEwsHVRI8j4NifDbAQY3csq3A2qL0gZEmXwHxrXU+D/Yv/bwlsaaH4HvyM9dN1q17rHDI3K1L3D6k1fBgm2yIVoZ/e6VLFQ52BkeqdsaAQH0B0V9kZVqs=
   file:
-    - dist/win-unpacked/gijitron-win-x64.zip
-    - dist/mac/gijitron-mac-x64.zip
-    - dist/linux-unpacked/gijitron-linux-x64.zip
+    - dist/win-unpacked/${APP_NAME}-win-x64.zip
+    - dist/mac/${APP_NAME}-mac-x64.zip
+    - dist/linux-unpacked/${APP_NAME}-linux-x64.zip
   skip_cleanup: true
   on:
     tags: true
