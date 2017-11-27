@@ -4,7 +4,6 @@ import Head from 'next/head';
 import GijirokuMaker from '../components/GijirokuMaker';
 import NoSSR from '../components/NoSSR';
 import stylesheet from '../styles/start.css';
-import draftStylesheet from '../styles/Draft.css';
 
 
 export default class extends React.Component {
@@ -13,7 +12,6 @@ export default class extends React.Component {
     return (<div id='container'>
       <Head>
         <title>gijitron</title>
-        <style dangerouslySetInnerHTML={{ __html: draftStylesheet }} />
         <style dangerouslySetInnerHTML={{ __html: stylesheet }} />
         <script dangerouslySetInnerHTML={{ __html: disableDnD }} />
       </Head>
