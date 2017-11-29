@@ -8,7 +8,7 @@ import stylesheet from '../styles/start.css';
 
 export default () => {
   const disableDnD = 'document.ondragover = document.ondrop = function(e) { e.preventDefault() }';
-  return (<div id='container'>
+  return (<React.Fragment>
     <Head>
       <title>gijitron</title>
       <style dangerouslySetInnerHTML={{ __html: stylesheet }} />
@@ -17,5 +17,5 @@ export default () => {
     <NoSSR>
       <GijirokuMaker />
     </NoSSR>
-  </div>);
+  </React.Fragment>);
 };
