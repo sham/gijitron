@@ -14,7 +14,7 @@ export default class NoSSR extends React.Component {
   }
   
   render() {
-    const DefaultOnSSR = () => (<span></span>);
+    const DefaultOnSSR = () => null;
     const { children, onSSR = <DefaultOnSSR /> } = this.props;
     const { canRender } = this.state;
   
