@@ -67,7 +67,7 @@ export default class GijirokuMaker extends React.Component {
   }
   render() {
     return (
-      <div id='reactroot'>
+      <React.Fragment>
         <GijirokuArea ref={(ref) => this.gijirokuArea = ref} buttonLayout={this.buttonLayout.bind(this)} />
         <MuiThemeProvider>
           <div style={{display: 'flex', justifyContent: 'center'}}>
@@ -80,7 +80,7 @@ export default class GijirokuMaker extends React.Component {
             <div style={{margin: '0px 4px'}}><RaisedButton label='Open' id='openButton' onMouseDown={(e) => {this.openClicked(); e.preventDefault();}} /></div>
           </div>
         </MuiThemeProvider>
-      </div>
+      </React.Fragment>
     );
   }
 }

@@ -16,6 +16,7 @@ body {
 body > div:first-child {
     width: 100%;
     height: 100%;
+    overflow: hidden;
 }
 
 div#__next {
@@ -28,13 +29,7 @@ div#__next > div {
     height: 100%;
 }
 
-div#reactroot {
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
-}
-
-.public-DraftEditor-content {
+.DraftEditor-root {
     margin: 5px auto 10px;
     width: calc(100vw - 10px);
     height: calc(100vh - 70px);

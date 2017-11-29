@@ -231,18 +231,16 @@ export default class GijirokuArea extends React.Component {
   }
   render() {
     return (
-      <div>
-        <Editor 
-          ref={(ref) => this.editor = ref} 
-          editorState={this.state.editorState} 
-          onChange={this.handleChange.bind(this)} 
-          handleKeyCommand={this.handleKeyCommand.bind(this)} 
-          onTab={this.onTab.bind(this)} 
-          blockStyleFn={myBlockStyleFn} 
-          keyBindingFn={myKeyBindingFn} 
-          handleDroppedFiles={this.handleDroppedFiles.bind(this)}
-        />
-      </div>
+      <Editor 
+        ref={(ref) => this.editor = ref} 
+        editorState={this.state.editorState} 
+        onChange={this.handleChange.bind(this)} 
+        handleKeyCommand={this.handleKeyCommand.bind(this)} 
+        onTab={this.onTab.bind(this)} 
+        blockStyleFn={myBlockStyleFn} 
+        keyBindingFn={myKeyBindingFn} 
+        handleDroppedFiles={this.handleDroppedFiles.bind(this)}
+      />
     );
   }
 }
