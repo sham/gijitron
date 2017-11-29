@@ -40,13 +40,21 @@ div#__next > div {
     line-height: 1.2em;
 }
 
+.public-DraftStyleDefault-ul {
+    margin: 8px 0px;
+}
+
+.public-DraftStyleDefault-ol {
+    margin: 8px 0px;
+}
+
 .pukiH2 {
     font-family: verdana, arial, helvetica, Sans-Serif;
     color: inherit;
     background-color: #DDEEFF;
     padding: .5em;
     border: 0px;
-    margin: 0px 0px .5em 0px;
+    margin: 10px 0px;
 }
 
 .pukiH3 {
@@ -58,7 +66,7 @@ div#__next > div {
     color: inherit;
     background-color: #FFFFFF;
     padding: .3em;
-    margin: 0px 0px .5em 0px;
+    margin: 10px 0px;
 }
 
 .pukiH4 {
@@ -67,7 +75,7 @@ div#__next > div {
     color: inherit;
     background-color: #FFFFFF;
     padding: .3em;
-    margin: 0px 0px .5em 0px;
+    margin: 10px 0px;
 }
 
 .pukiPre {
