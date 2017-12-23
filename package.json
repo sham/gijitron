@@ -42,7 +42,8 @@
     "raw-loader": "^0.5.1",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
-    "sass-loader": "^6.0.6"
+    "sass-loader": "^6.0.6",
+    "webpack": "^3.0.0"
   },
   "dependencies": {
     "app-root-path": "^2.0.1",
