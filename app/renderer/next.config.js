@@ -6,7 +6,7 @@ module.exports = {
     config.target = 'electron-renderer';
     config.module.rules.push(
       {
-        test: /\.(css|scss)$/,
+        test: /\.s?css$/,
         loader: 'emit-file-loader',
         options: {
           name: 'dist/[path][name].[ext]'
