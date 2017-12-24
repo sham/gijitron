@@ -1,4 +1,5 @@
-@import "draft-js/dist/Draft.css";
+@import 'normalize.css';
+@import 'draft-js/dist/Draft.css';
 
 html {
     width: 100%;
