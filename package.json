@@ -1,6 +1,6 @@
 {
   "name": "gijitron",
-  "version": "1.0.12",
+  "version": "1.0.13",
   "description": "gijitron is an editor to take the minutes of a meeting.",
   "main": "app/main/index.js",
   "scripts": {
