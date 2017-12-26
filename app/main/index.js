@@ -15,7 +15,12 @@ app.on('ready', async () => {
     width: 800,
     height: 600,
     minWidth: 500,
-    minHeight: 300
+    minHeight: 300,
+    show: false
+  });
+
+  mainWindow.once('ready-to-show', () => {
+    mainWindow.show();
   });
 
   const devPath = 'http://localhost:8000/start';
