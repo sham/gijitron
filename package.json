@@ -44,7 +44,7 @@
     "draft-js": "^0.10.4",
     "electron": "^1.7.10",
     "electron-builder": "^19.49.2",
-    "eslint": "^4.13.1",
+    "eslint": "^4.14.0",
     "eslint-plugin-react": "^7.5.1",
     "glob": "^7.1.2",
     "material-ui": "^0.20.0",
