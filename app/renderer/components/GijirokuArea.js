@@ -73,7 +73,7 @@ export default class GijirokuArea extends React.Component {
         }
       }
       case 'soft-return': {
-        if (['unordered-list-item', 'ordered-list-item'].includes(focusBlockType)) {
+        if (['unordered-list-item', 'ordered-list-item'].includes(focusBlockType) && selectionState.isCollapsed()) {
           const newState = RichUtils.insertSoftNewline(editorState);
           if (newState) {
             this.handleChange(newState);
