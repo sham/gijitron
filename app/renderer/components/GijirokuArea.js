@@ -4,7 +4,7 @@ import fs from 'fs';
 import React from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
-import {Editor, EditorState, RichUtils, convertToRaw, convertFromRaw, getDefaultKeyBinding, KeyBindingUtil} from 'draft-js';
+import {Editor, EditorState, RichUtils, convertToRaw, convertFromRaw, getDefaultKeyBinding, KeyBindingUtil, Modifier} from 'draft-js';
 const {hasCommandModifier} = KeyBindingUtil;
 
 
@@ -83,6 +83,15 @@ export default class GijirokuArea extends React.Component {
             this.handleChange(newState);
             return true;
           }
+        }
+        break;
+      }
+      case 'hard-return': {
+        const newContentState = Modifier.splitBlock(contentState, selectionState);
+        const newState = EditorState.push(editorState, newContentState, 'split-block');
+        if (newState) {
+          this.handleChange(RichUtils.toggleBlockType(newState, 'unstyled'));
+          return true;
         }
         break;
       }
@@ -267,9 +276,11 @@ function myKeyBindingFn(e) {
   if (e.nativeEvent.altKey) {
     return 'header';
   }
-  if (e.nativeEvent.shiftKey) {
-    if (e.keyCode == 13) {
+  if (e.keyCode == 13) {
+    if (e.nativeEvent.shiftKey) {
       return 'soft-return';
+    } else {
+      return 'hard-return';
     }
   }
   return getDefaultKeyBinding(e);
