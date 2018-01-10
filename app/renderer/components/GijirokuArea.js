@@ -66,6 +66,10 @@ export default class GijirokuArea extends React.Component {
             this.handleChange(RichUtils.toggleBlockType(editorState, 'header-four'));
             return true;
           }
+          case 'header-four': {
+            this.handleChange(RichUtils.toggleBlockType(editorState, 'unstyled'));
+            return true;
+          }
           default: {
             this.handleChange(RichUtils.toggleBlockType(editorState, 'header-two'));
             return true;
