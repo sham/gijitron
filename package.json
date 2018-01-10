@@ -6,9 +6,8 @@
   "scripts": {
     "start": "electron .",
     "build": "next build app/renderer && next export app/renderer",
-    "dist": "yarn run build && build --x64 --publish=never",
-    "lint": "eslint app/**",
-    "lint:fix": "yarn run lint --fix",
+    "dist": "yarn build && build --dir --x64 --publish=never",
+    "lint": "eslint --ignore-path .gitignore app",
     "test": "echo \"Error: no test specified\""
   },
   "author": "shamofu",
@@ -17,25 +16,12 @@
     "type": "git",
     "url": "git+https://github.com/shamofu/gijitron.git"
   },
-  "bugs": {
-    "url": "https://github.com/shamofu/gijitron/issues"
-  },
-  "homepage": "https://github.com/shamofu/gijitron#readme",
   "build": {
     "files": [
-      "app/**/*",
-      "!app/renderer",
-      "app/renderer/out"
-    ],
-    "win": {
-      "target": "dir"
-    },
-    "mac": {
-      "target": "dir"
-    },
-    "linux": {
-      "target": "dir"
-    }
+      "app/**",
+      "!app/renderer/**",
+      "app/renderer/out/**"
+    ]
   },
   "devDependencies": {
     "autoprefixer": "^7.2.4",
