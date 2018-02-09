@@ -202,7 +202,7 @@ export default class GijirokuArea extends React.Component {
     if (!fs.existsSync(curDir)) {
       fs.mkdirSync(curDir);
     }
-    shell.openExternal(curDir);
+    shell.openItem(curDir);
   }
   onTab(e) {
     const editorState = this.state.editorState;
