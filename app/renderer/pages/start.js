@@ -18,11 +18,6 @@ export default () => {
     </NoSSR>
     <style jsx global>{ DraftCSS }</style>
     <style jsx global>{`
-      html {
-        width: 100%;
-        height: 100%;
-      }
-
       body {
         width: 100%;
         height: 100%;
@@ -30,21 +25,6 @@ export default () => {
         margin: 0px;
         padding: 0px;
         overflow: hidden;
-      }
-
-      body > div:first-child {
-        width: 100%;
-        height: 100%;
-      }
-
-      div#__next {
-        width: 100%;
-        height: 100%;
-      }
-
-      div#__next > div {
-        width: 100%;
-        height: 100%;
       }
 
       .DraftEditor-root {
