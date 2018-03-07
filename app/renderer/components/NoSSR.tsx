@@ -1,27 +1,31 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 
-export default class NoSSR extends React.Component {
-  constructor(...args) {
-    super(...args);
+interface IProps {
+  children: any;
+  onSSR?: any;
+}
+
+interface IState {
+  canRender: boolean;
+}
+
+export default class NoSSR extends React.Component<IProps, IState> {
+  constructor(args) {
+    super(args);
     this.state = {
       canRender: false
     };
   }
-  
-  componentDidMount() {
+
+  public componentDidMount() {
     this.setState({ canRender: true });
   }
-  
-  render() {
+
+  public render() {
     const DefaultOnSSR = () => null;
     const { children, onSSR = <DefaultOnSSR /> } = this.props;
     const { canRender } = this.state;
-  
+
     return canRender ? children : onSSR;
   }
 }
-NoSSR.propTypes = {
-  children: PropTypes.element.isRequired,
-  onSSR: PropTypes.element
-};

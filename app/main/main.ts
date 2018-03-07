@@ -1,13 +1,11 @@
-// Native
+
 const { format } = require('url');
 
-// Packages
 const { BrowserWindow, app } = require('electron');
 const isDev = require('electron-is-dev');
 const prepareNext = require('electron-next');
 const { resolve } = require('app-root-path');
 
-// Prepare the renderer once the app is ready
 app.on('ready', async () => {
   await prepareNext('./app/renderer');
 
@@ -35,7 +33,9 @@ app.on('ready', async () => {
   mainWindow.loadURL(url);
   mainWindow.setMenu(null);
 
-  if (isDev) mainWindow.webContents.openDevTools();
+  if (isDev) {
+    mainWindow.webContents.openDevTools();
+  }
 });
 
 // Quit the app once all windows are closed

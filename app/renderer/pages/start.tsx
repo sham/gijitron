@@ -4,13 +4,14 @@ import Head from 'next/head';
 import GijirokuMaker from '../components/GijirokuMaker';
 import NoSSR from '../components/NoSSR';
 
-import DraftCSS from 'draft-js/dist/Draft.css';
-import style from '../styles/style.css';
+const DraftCSS: string = require('draft-js/dist/Draft.css');
+const style: string = require('../styles/style.css');
 
 export default () => {
-  const disableDnD = 'document.ondragover = document.ondrop = function(e) { e.preventDefault() }';
+  const disableDnD: string = 'document.ondragover = document.ondrop = function(e) { e.preventDefault() }';
   const css = `${DraftCSS}\n${style}`;
-  return (<React.Fragment>
+  return (
+  <React.Fragment>
     <Head>
       <title>gijitron</title>
       <script dangerouslySetInnerHTML={{ __html: disableDnD }} />
@@ -18,6 +19,7 @@ export default () => {
     <NoSSR>
       <GijirokuMaker />
     </NoSSR>
-    <style jsx global>{ css }</style>
-  </React.Fragment>);
+    <style jsx global>{css}</style>
+  </React.Fragment>
+  );
 };

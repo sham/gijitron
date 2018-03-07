@@ -2,13 +2,22 @@ import {remote, shell} from 'electron';
 import path from 'path';
 import fs from 'fs';
 import React from 'react';
-import PropTypes from 'prop-types';
 import moment from 'moment';
-import {Editor, EditorState, RichUtils, convertToRaw, convertFromRaw, getDefaultKeyBinding, KeyBindingUtil, Modifier} from 'draft-js';
+import {Editor, EditorState, RichUtils, convertToRaw,
+  convertFromRaw, getDefaultKeyBinding, KeyBindingUtil, Modifier} from 'draft-js';
 const {hasCommandModifier} = KeyBindingUtil;
 
+interface IProps {
+  buttonLayout: (buttonLayout: string[]) => void;
+}
 
-export default class GijirokuArea extends React.Component {
+interface IState {
+  editorState: EditorState;
+  eigen: string;
+}
+
+export default class GijirokuArea extends React.Component<IProps, IState> {
+  private editor: Editor;
   constructor(props) {
     super(props);
     const date = moment().locale('ja');
@@ -29,8 +38,8 @@ export default class GijirokuArea extends React.Component {
       const updatedEditorState = EditorState.createWithContent(convertFromRaw(settings));
       if ('anchorBlock' in settings && 'anchorOffset' in settings) {
         const updatedSelectionState = updatedEditorState.getSelection().merge({
-          anchorKey: settings['anchorBlock'],
-          anchorOffset: settings['anchorOffset']
+          anchorKey: settings.anchorBlock,
+          anchorOffset: settings.anchorOffset
         });
         this.handleChange(EditorState.forceSelection(updatedEditorState, updatedSelectionState));
       } else {
@@ -39,14 +48,14 @@ export default class GijirokuArea extends React.Component {
       return true;
     });
   }
-  componentDidMount() {
+  public componentDidMount() {
     this.editor.focus();
   }
-  handleChange(editorState) {
+  public handleChange(editorState) {
     this.setState({editorState});
     this.props.buttonLayout(editorState.getCurrentInlineStyle().toArray());
   }
-  handleKeyCommand(command) {
+  public handleKeyCommand(command) {
     const editorState = this.state.editorState;
     const selectionState = editorState.getSelection();
     const contentState = editorState.getCurrentContent();
@@ -106,37 +115,39 @@ export default class GijirokuArea extends React.Component {
     }
     return false;
   }
-  sizeClicked(fontSize) {
+  public sizeClicked(fontSize) {
+    // change size
   }
-  boldClicked() {
+  public boldClicked() {
     this.handleChange(RichUtils.toggleInlineStyle(this.state.editorState, 'BOLD'));
   }
-  italicClicked() {
+  public italicClicked() {
     this.handleChange(RichUtils.toggleInlineStyle(this.state.editorState, 'ITALIC'));
   }
-  saveClicked(saveCompleted) {
+  public saveClicked(saveCompleted) {
     const curDir = path.join(remote.app.getPath('userData'), '/gijiroku');
     if (!fs.existsSync(curDir)) {
       fs.mkdirSync(curDir);
     }
     const contentJson = JSON.stringify(convertToRaw(this.state.editorState.getCurrentContent()),  null, '  ');
-    fs.writeFile(path.join(curDir, `/${this.state.eigen}.json`), contentJson, (err) => {if (err) throw err; saveCompleted('json');});
+    fs.writeFile(path.join(curDir, `/${this.state.eigen}.json`), contentJson,
+      (err) => { if (err) { throw err; } saveCompleted('json'); });
     const contentObject = JSON.parse(contentJson);
     let output = '';
     let preblock = '';
-    contentObject['blocks'].forEach((block) => {
-      let text = block['text'];
+    contentObject.blocks.forEach((block) => {
+      let text = block.text;
       const tasks = [];
-      block['inlineStyleRanges'].forEach((inlineStyle) => {
-        switch (inlineStyle['style']) {
+      block.inlineStyleRanges.forEach((inlineStyle) => {
+        switch (inlineStyle.style) {
           case 'BOLD': {
-            tasks.push({'str': '\'\'', 'place': inlineStyle['offset']});
-            tasks.push({'str': '\'\'', 'place': inlineStyle['offset'] + inlineStyle['length']});
+            tasks.push({str: '\'\'', place: inlineStyle.offset});
+            tasks.push({str: '\'\'', place: inlineStyle.offset + inlineStyle.length});
             break;
           }
           case 'ITALIC': {
-            tasks.push({'str': '\'\'\'', 'place': inlineStyle['offset']});
-            tasks.push({'str': '\'\'\'', 'place': inlineStyle['offset'] + inlineStyle['length']});
+            tasks.push({str: '\'\'\'', place: inlineStyle.offset});
+            tasks.push({str: '\'\'\'', place: inlineStyle.offset + inlineStyle.length});
             break;
           }
           default: {
@@ -145,15 +156,15 @@ export default class GijirokuArea extends React.Component {
         }
       });
       tasks.sort((a, b) => {
-        if (a.place > b.place) return -1;
-        if (a.place < b.place) return 1;
+        if (a.place > b.place) { return -1; }
+        if (a.place < b.place) { return 1; }
         return 0;
       });
       tasks.forEach((task) => {
-        text = text.slice(0, task.place) + task['str'] + text.slice(task.place);
+        text = text.slice(0, task.place) + task.str + text.slice(task.place);
       });
       text = text.replace(/\n/g, '\r\n');
-      switch (block['type']) {
+      switch (block.type) {
         case 'unstyled': {
           if (text.match(/^(#|:)/) == null) {
             text += '~';
@@ -164,11 +175,11 @@ export default class GijirokuArea extends React.Component {
           break;
         }
         case 'unordered-list-item': {
-          text = '-'.repeat(block['depth'] + 1) + ' ' + text.replace(/\r\n/g, '~\r\n');
+          text = '-'.repeat(block.depth + 1) + ' ' + text.replace(/\r\n/g, '~\r\n');
           break;
         }
         case 'ordered-list-item': {
-          text = '+'.repeat(block['depth'] + 1) + ' ' + text.replace(/\r\n/g, '~\r\n');
+          text = '+'.repeat(block.depth + 1) + ' ' + text.replace(/\r\n/g, '~\r\n');
           break;
         }
         case 'header-two': {
@@ -193,18 +204,19 @@ export default class GijirokuArea extends React.Component {
         }
       }
       output += text + '\r\n';
-      preblock = block['type'];
+      preblock = block.type;
     });
-    fs.writeFile(path.join(curDir, `/${this.state.eigen}.txt`), output, (err) => {if (err) throw err; saveCompleted('txt');});
+    fs.writeFile(path.join(curDir, `/${this.state.eigen}.txt`), output,
+      (err) => { if (err) { throw err; } saveCompleted('txt'); });
   }
-  openClicked() {
+  public openClicked() {
     const curDir = path.join(remote.app.getPath('userData'), '/gijiroku');
     if (!fs.existsSync(curDir)) {
       fs.mkdirSync(curDir);
     }
     shell.openItem(curDir);
   }
-  onTab(e) {
+  public onTab(e) {
     const editorState = this.state.editorState;
     switch (RichUtils.getCurrentBlockType(editorState)) {
       case 'unordered-list-item': {
@@ -226,7 +238,7 @@ export default class GijirokuArea extends React.Component {
     }
     e.preventDefault();
   }
-  handleDroppedFiles(selection, files) {
+  public handleDroppedFiles(selection, files) {
     const filePath = files[0].path;
     if (filePath.match(/\.json$/i) != null) {
       fs.readFile(filePath, (err, data) => {
@@ -242,16 +254,16 @@ export default class GijirokuArea extends React.Component {
       });
     }
   }
-  render() {
+  public render() {
     return (
-      <Editor 
-        ref={(ref) => this.editor = ref} 
-        editorState={this.state.editorState} 
-        onChange={this.handleChange.bind(this)} 
-        handleKeyCommand={this.handleKeyCommand.bind(this)} 
-        onTab={this.onTab.bind(this)} 
-        blockStyleFn={myBlockStyleFn} 
-        keyBindingFn={myKeyBindingFn} 
+      <Editor
+        ref={(ref) => this.editor = ref}
+        editorState={this.state.editorState}
+        onChange={this.handleChange.bind(this)}
+        handleKeyCommand={this.handleKeyCommand.bind(this)}
+        onTab={this.onTab.bind(this)}
+        blockStyleFn={myBlockStyleFn}
+        keyBindingFn={myKeyBindingFn}
         handleDroppedFiles={this.handleDroppedFiles.bind(this)}
       />
     );
@@ -276,7 +288,7 @@ function myKeyBindingFn(e) {
   if (e.nativeEvent.altKey) {
     return 'header';
   }
-  if (e.keyCode == 13) {
+  if (e.keyCode === 13) {
     if (e.nativeEvent.shiftKey) {
       return 'soft-return';
     } else {
@@ -285,6 +297,3 @@ function myKeyBindingFn(e) {
   }
   return getDefaultKeyBinding(e);
 }
-GijirokuArea.propTypes = {
-  buttonLayout: PropTypes.func.isRequired
-};
