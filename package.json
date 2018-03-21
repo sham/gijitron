@@ -10,11 +10,11 @@
     "lint": "tslint app/**/*.ts{,x}",
     "test": "echo \"Error: no test specified\""
   },
-  "author": "shamofu",
+  "author": "sham",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/shamofu/gijitron.git"
+    "url": "git+https://github.com/sham/gijitron.git"
   },
   "build": {
     "files": [
