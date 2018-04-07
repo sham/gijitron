@@ -1,41 +1,31 @@
+const { format } = require('url')
 
-const { format } = require('url');
-
-const { BrowserWindow, app } = require('electron');
-const isDev = require('electron-is-dev');
-const prepareNext = require('electron-next');
-const { resolve } = require('app-root-path');
+const { BrowserWindow, app } = require('electron')
+const isDev = require('electron-is-dev')
+const { resolve } = require('app-root-path')
 
 app.on('ready', async () => {
-  await prepareNext('./app/renderer');
-
   const mainWindow = new BrowserWindow({
     width: 800,
     height: 600,
-    minWidth: 500,
-    minHeight: 300,
     show: false
-  });
+  })
 
   mainWindow.once('ready-to-show', () => {
-    mainWindow.show();
-  });
+    mainWindow.show()
+    if (isDev); { mainWindow.webContents.openDevTools() }
+  })
 
-  const devPath = 'http://localhost:8000/start';
-
+  const devPath = 'http://localhost:1124'
   const prodPath = format({
-    pathname: resolve('app/renderer/out/start/index.html'),
+    pathname: resolve('app/renderer/.parcel/production/index.html'),
     protocol: 'file:',
     slashes: true
-  });
+  })
+  const url = isDev ? devPath : prodPath
 
-  const url = isDev ? devPath : prodPath;
-  mainWindow.loadURL(url);
-  mainWindow.setMenu(null);
+  mainWindow.setMenu(null)
+  mainWindow.loadURL(url)
+})
 
-  if (isDev) {
-    mainWindow.webContents.openDevTools();
-  }
-});
-
-app.on('window-all-closed', app.quit);
+app.on('window-all-closed', app.quit)

@@ -1,3 +1,10 @@
 {
-  "presets": ["next/babel"]
+  "presets": [
+    "react",
+    ["env", {
+      "targets": {
+        "electron": "1.8"
+      }
+    }]
+  ]
 }

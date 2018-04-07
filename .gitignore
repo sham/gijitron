@@ -1,10 +1,12 @@
 # build output
-dist
-app/renderer/.next
-app/renderer/out
+/.cache
+/dist
+/app/main/main.js
+/app/renderer/.parcel
+*.map
 
 # dependencies
-node_modules
+/node_modules
 
 # logs
 *.log

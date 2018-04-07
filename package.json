@@ -2,11 +2,17 @@
   "name": "gijitron",
   "version": "1.2.1",
   "description": "gijitron is an editor to take the minutes of a meeting.",
-  "main": "app/main/main.ts",
+  "main": "app/main/main.js",
   "scripts": {
-    "start": "electron .",
-    "build": "next build app/renderer && next export app/renderer",
-    "dist": "yarn build && build --dir --x64 --publish=never",
+    "start": "run-p -r parcel:launch electron:launch",
+    "dist": "run-s parcel:build \"electron:build {@}\" --",
+    "electron:launch": "run-s parcel:main electron:start",
+    "electron:start": "electron .",
+    "electron:build": "build --dir --x64 --publish=never",
+    "parcel:launch": "parcel app/renderer/index.html -p 1124 -d app/renderer/.parcel/development --target=electron",
+    "parcel:build": "run-s parcel:main parcel:renderer",
+    "parcel:main": "parcel build app/main/main.ts -d app/main --out-file=main --target=electron",
+    "parcel:renderer": "parcel build app/renderer/index.html --public-url ./ -d app/renderer/.parcel/production --target=electron",
     "lint": "tslint app/**/*.ts{,x}",
     "test": "echo \"Error: no test specified\""
   },
@@ -19,31 +25,31 @@
   "build": {
     "files": [
       "app/**",
+      "!app/main/main.ts",
       "!app/renderer/**",
-      "app/renderer/out/**"
+      "app/renderer/.parcel/production/**",
+      "!app/**/*.map"
     ]
   },
   "devDependencies": {
-    "@types/react": "^16.0.40",
-    "@types/styled-jsx": "^2.2.2",
-    "@zeit/next-typescript": "^0.0.10",
-    "draft-js": "^0.10.5",
+    "@types/react": "^16.3.5",
+    "babel-preset-env": "^1.6.1",
+    "babel-preset-react": "^6.24.1",
     "electron": "^1.8.4",
-    "electron-builder": "^20.5.1",
-    "material-ui": "^0.20.0",
-    "moment": "^2.21.0",
-    "next": "^5.0.0",
-    "raw-loader": "^0.5.1",
-    "react": "^16.2.0",
-    "react-dom": "^16.2.0",
+    "electron-builder": "^20.8.1",
+    "npm-run-all": "^4.1.2",
+    "parcel-bundler": "^1.7.0",
     "tslint": "^5.9.1",
     "tslint-react": "^3.5.1",
-    "typescript": "^2.7.2",
-    "webpack": "^4.1.1"
+    "typescript": "^2.8.1"
   },
   "dependencies": {
     "app-root-path": "^2.0.1",
     "electron-is-dev": "^0.3.0",
-    "electron-next": "^3.1.4"
+    "react": "^16.3.1",
+    "react-dom": "^16.3.1",
+    "material-ui": "^0.20.0",
+    "moment": "^2.22.0",
+    "draft-js": "^0.10.5"
   }
 }
