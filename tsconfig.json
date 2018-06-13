@@ -4,6 +4,7 @@
     "jsx": "preserve",
     "sourceMap": true,
     "noUnusedLocals": true,
-    "noUnusedParameters": true
+    "noUnusedParameters": true,
+    "allowSyntheticDefaultImports": true
   }
 }
