@@ -1,21 +1,21 @@
-import * as React from 'react';
-import {MuiThemeProvider, RaisedButton, TextField, CircularProgress} from 'material-ui';
+import * as React from 'react'
+import {MuiThemeProvider, RaisedButton, TextField, CircularProgress} from 'material-ui'
 
-import GijirokuArea from './GijirokuArea';
+import GijirokuArea from './GijirokuArea'
 
 interface IState {
-  boldLayout: boolean;
-  italicLayout: boolean;
-  fontSize: number;
-  saving: boolean;
-  jsonSaved: boolean;
-  txtSaved: boolean;
+  boldLayout: boolean
+  italicLayout: boolean
+  fontSize: number
+  saving: boolean
+  jsonSaved: boolean
+  txtSaved: boolean
 }
 
 export default class GijirokuMaker extends React.Component<{}, IState> {
-  private gijirokuArea: GijirokuArea;
+  private gijirokuArea: GijirokuArea
   constructor(props) {
-    super(props);
+    super(props)
     this.state = {
       boldLayout: false,
       italicLayout: false,
@@ -23,16 +23,16 @@ export default class GijirokuMaker extends React.Component<{}, IState> {
       saving: false,
       jsonSaved: false,
       txtSaved: false
-    };
+    }
   }
   public sizeClicked() {
-    this.gijirokuArea.sizeClicked(this.state.fontSize);
+    this.gijirokuArea.sizeClicked(this.state.fontSize)
   }
   public boldClicked() {
-    this.gijirokuArea.boldClicked();
+    this.gijirokuArea.boldClicked()
   }
   public italicClicked() {
-    this.gijirokuArea.italicClicked();
+    this.gijirokuArea.italicClicked()
   }
   public saveClicked() {
     if (!(this.state.saving || this.state.jsonSaved || this.state.txtSaved)) {
@@ -40,39 +40,39 @@ export default class GijirokuMaker extends React.Component<{}, IState> {
         saving: true,
         jsonSaved: false,
         txtSaved: false
-      });
-      this.gijirokuArea.saveClicked(this.saveCompleted.bind(this));
+      })
+      this.gijirokuArea.saveClicked(this.saveCompleted.bind(this))
     }
   }
   public saveCompleted(identifier) {
     if (identifier === 'json') {
-      this.setState({jsonSaved: true});
+      this.setState({jsonSaved: true})
     }
     if (identifier === 'txt') {
-      this.setState({txtSaved: true});
+      this.setState({txtSaved: true})
     }
     if (this.state.jsonSaved && this.state.txtSaved) {
-      this.setState({saving: false});
+      this.setState({saving: false})
       setTimeout(() => {
         this.setState({
           saving: false,
           jsonSaved: false,
           txtSaved: false
-        });
-      }, 2000);
+        })
+      }, 2000)
     }
   }
   public openClicked() {
-    this.gijirokuArea.openClicked();
+    this.gijirokuArea.openClicked()
   }
   public buttonLayout(buttonLayout) {
     this.setState({
       boldLayout: buttonLayout.includes('BOLD'),
       italicLayout: buttonLayout.includes('ITALIC')
-    });
+    })
   }
   public sizeChanged(e) {
-    this.setState({fontSize: e.target.value});
+    this.setState({fontSize: e.target.value})
   }
   public render() {
     return (
@@ -84,7 +84,7 @@ export default class GijirokuMaker extends React.Component<{}, IState> {
               <TextField
                 id='sizeInput'
                 value={this.state.fontSize}
-                onChange={(e) => { this.sizeChanged(e); }}
+                onChange={(e) => { this.sizeChanged(e) }}
                 type='number'
                 inputStyle={{textAlign: 'left'}}
                 style={{width: '35px'}}
@@ -96,7 +96,7 @@ export default class GijirokuMaker extends React.Component<{}, IState> {
               <RaisedButton
                 label='Size'
                 id='sizeButton'
-                onMouseDown={(e) => { this.sizeClicked(); e.preventDefault(); }}
+                onMouseDown={(e) => { this.sizeClicked(); e.preventDefault() }}
               />
             </div>
             <div style={{margin: '0px 4px'}}>
@@ -104,7 +104,7 @@ export default class GijirokuMaker extends React.Component<{}, IState> {
                 label='Bold'
                 primary={this.state.boldLayout}
                 id='boldButton'
-                onMouseDown={(e) => { this.boldClicked(); e.preventDefault(); }}
+                onMouseDown={(e) => { this.boldClicked(); e.preventDefault() }}
               />
             </div>
             <div style={{margin: '0px 4px'}}>
@@ -112,7 +112,7 @@ export default class GijirokuMaker extends React.Component<{}, IState> {
                 label='Italic'
                 id='italicButton'
                 primary={this.state.italicLayout}
-                onMouseDown={(e) => { this.italicClicked(); e.preventDefault(); }}
+                onMouseDown={(e) => { this.italicClicked(); e.preventDefault() }}
               />
             </div>
             <div style={{margin: '0px 4px'}}>
@@ -121,7 +121,7 @@ export default class GijirokuMaker extends React.Component<{}, IState> {
                 disabled={this.state.saving}
                 backgroundColor={(this.state.jsonSaved && this.state.txtSaved) ? '#21BA45' : '#FFFFFF'}
                 id='saveButton'
-                onMouseDown={(e) => { this.saveClicked(); e.preventDefault(); }}
+                onMouseDown={(e) => { this.saveClicked(); e.preventDefault() }}
               />
               {this.state.saving &&
                 <CircularProgress
@@ -134,12 +134,12 @@ export default class GijirokuMaker extends React.Component<{}, IState> {
               <RaisedButton
                 label='Open'
                 id='openButton'
-                onMouseDown={(e) => { this.openClicked(); e.preventDefault(); }}
+                onMouseDown={(e) => { this.openClicked(); e.preventDefault() }}
               />
             </div>
           </div>
         </MuiThemeProvider>
       </React.Fragment>
-    );
+    )
   }
 }
