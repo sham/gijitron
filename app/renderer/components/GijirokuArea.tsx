@@ -1,8 +1,8 @@
 import {remote, shell} from 'electron'
-import path from 'path'
-import fs from 'fs'
+import * as path from 'path'
+import * as fs from 'fs'
 import * as React from 'react'
-import moment from 'moment'
+import * as moment from 'moment'
 import {Editor, EditorState, RichUtils, convertToRaw,
   convertFromRaw, getDefaultKeyBinding, KeyBindingUtil, Modifier} from 'draft-js'
 const {hasCommandModifier} = KeyBindingUtil
