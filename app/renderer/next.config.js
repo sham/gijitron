@@ -10,8 +10,5 @@ module.exports = withTypescript({
       use: 'raw-loader'
     });
     return webpackConfig;
-  },
-  exportPathMap: () => ({
-    '/start': { page: '/start' }
-  })
+  }
 });
