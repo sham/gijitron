@@ -10,8 +10,10 @@ before_install:
   - brew update
 install:
   - yarn install
+before_script:
+  - sudo Xvfb :99 -ac -screen 0 1920x1080x8 &
 script:
-  - yarn test
+  - yarn test --coverage
 before_deploy:
   - yarn run dist -mwl
   - cd dist/win-unpacked && zip -9 -ry ${APP_NAME}-win-x64.zip . && cd ../..

@@ -1,10 +1,11 @@
 # build output
-dist
-app/renderer/.next
-app/renderer/out
+/dist
+/.coverage
+/app/renderer/.next
+/app/renderer/out
 
 # dependencies
-node_modules
+/node_modules
 
 # logs
 *.log
